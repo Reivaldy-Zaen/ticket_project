@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Secure Ticketing')</title>
+
+    <title>@yield('title', 'Secure Ticketing') - SMK Wikrama Bogor</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -24,6 +25,9 @@
             background-color: var(--bg-body);
             color: var(--text-dark);
             font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .navbar {
@@ -69,7 +73,16 @@
             background-color: var(--primary-dark);
             color: white;
         }
+
+        .dropdown-header {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #95a5a6;
+        }
     </style>
+
+    @stack('styles')
 </head>
 
 <body>
@@ -88,33 +101,68 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
+                <ul class="navbar-nav me-auto align-items-center">
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium {{ request()->routeIs('tickets.*') ? 'text-primary' : '' }}"
+                                href="{{ route('tickets.index') }}">
+                                <i class="bi bi-ticket-detailed me-1"></i> Tickets
+                            </a>
+                        </li>
 
-                    @guest
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-medium" href="#" role="button"
+                                data-bs-toggle="dropdown">
+                                <i class="bi bi-code-slash me-1"></i> Demo Blade
+                            </a>
+                            <ul class="dropdown-menu border-0 shadow-lg">
+                                <li><a class="dropdown-item" href="{{ route('demo-blade.index') }}">Overview</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ route('demo-blade.directives') }}">Directives</a></li>
+                                <li><a class="dropdown-item" href="{{ route('demo-blade.components') }}">Components</a></li>
+                                <li><a class="dropdown-item" href="{{ route('demo-blade.includes') }}">Includes</a></li>
+                                <li><a class="dropdown-item" href="{{ route('demo-blade.stacks') }}">Stacks</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-medium" href="#" role="button"
+                                data-bs-toggle="dropdown">
+                                <i class="bi bi-shield-exclamation me-1"></i> XSS Lab
+                            </a>
+                            <ul class="dropdown-menu border-0 shadow-lg">
+                                <li><a class="dropdown-item" href="{{ route('xss-lab.index') }}">Overview</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-header">Reflected XSS</li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('xss-lab.reflected.vulnerable') }}">Vulnerable</a></li>
+                                <li><a class="dropdown-item text-success" href="{{ route('xss-lab.reflected.secure') }}">Secure</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-header">Stored XSS</li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('xss-lab.stored.vulnerable') }}">Vulnerable</a></li>
+                                <li><a class="dropdown-item text-success" href="{{ route('xss-lab.stored.secure') }}">Secure</a></li>
+                            </ul>
+                        </li>
+                    @endauth
+                </ul>
+
+                <ul class="navbar-nav ms-auto align-items-center">
+                    {{-- @guest
                         <li class="nav-item">
                             <a class="nav-link fw-bold text-primary" href="{{ route('login') }}">
                                 <i class="bi bi-box-arrow-in-right me-1"></i> Login
                             </a>
                         </li>
-                    @endguest
+                    @endguest --}}
 
                     @auth
-                        <li class="nav-item">
-                            <a class="nav-link fw-medium me-3" href="{{ route('tickets.index') }}">Tickets</a>
-                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle bg-light px-3 py-2 rounded-pill shadow-sm" href="#"
                                 data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle me-1"></i> {{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2">
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i> Profile</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i> Settings</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i> Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -127,17 +175,31 @@
                             </ul>
                         </li>
                     @endauth
-
                 </ul>
             </div>
         </div>
     </nav>
 
     <main class="container py-5">
+        @if (session('success'))
+            <div class="alert alert-success border-0 shadow-sm alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger border-0 shadow-sm alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         @yield('content')
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>

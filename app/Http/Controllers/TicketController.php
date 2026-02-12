@@ -150,4 +150,10 @@ class TicketController extends Controller
             ->route('tickets.index')
             ->with('success', 'Tiket berhasil dihapus!');
     }
+
+    public function vulnerableSearch(Request $request)
+    {
+        $query = $request->query('q');
+        return view('vulnerable.search', compact('query'));
+    }
 }

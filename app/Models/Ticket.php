@@ -77,6 +77,11 @@ class Ticket extends Model
         return $query->where('status', $status);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     /**
      * Scope untuk filter tiket berdasarkan prioritas
      * 
