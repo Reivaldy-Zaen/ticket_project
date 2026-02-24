@@ -13,6 +13,7 @@ class Comment extends Model
 
     protected $fillable = [
         'ticket_id',
+        'user_id',
         'author_name',
         'content',
     ];
@@ -20,5 +21,9 @@ class Comment extends Model
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
+    }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

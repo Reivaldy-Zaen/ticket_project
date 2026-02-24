@@ -6,6 +6,7 @@
     <div class="container-fluid px-md-5">
         <div class="row g-0 shadow-lg rounded-4 overflow-hidden border bg-white" style="min-height: 85vh;">
 
+            {{-- PANEL KIRI: INFO --}}
             <div class="col-md-5 bg-light p-5 d-flex flex-column border-end position-relative">
                 <div class="mb-auto">
                     <a href="{{ route('tickets.show', $ticket) }}"
@@ -46,25 +47,43 @@
                 </div>
             </div>
 
-            <div class="col-md-7 p-5 bg-white d-flex align-items-center">
+            {{-- PANEL KANAN: FORM EDIT --}}
+            <div class="col-md-7 p-5 bg-white d-flex flex-column justify-content-center">
+                
+                {{-- 1. Global Error Display --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger shadow-sm rounded-3 mb-4 border-0 border-start border-danger border-4">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Oops! Ada kesalahan:</h6>
+                        <ul class="mb-0 small">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('tickets.update', $ticket) }}" method="POST" class="w-100">
                     @csrf
                     @method('PUT')
                     <div class="row g-4">
+                        
+                        {{-- 2. Per-field Error Display: Title --}}
                         <div class="col-12">
                             <label for="title" class="form-label fw-bold small text-muted">JUDUL TIKET</label>
                             <input type="text" name="title" id="title"
-                                class="form-control form-control-lg border-0 bg-light px-4 py-3"
+                                class="form-control form-control-lg border-0 bg-light px-4 py-3 @error('title') is-invalid @enderror"
                                 value="{{ old('title', $ticket->title) }}" required>
+                            
                             @error('title')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
+                        {{-- Per-field Error Display: Status --}}
                         <div class="col-md-6">
                             <label for="status" class="form-label fw-bold small text-muted">UBAH STATUS</label>
                             <select name="status" id="status"
-                                class="form-select border-0 bg-light px-4 py-3 shadow-none" required>
+                                class="form-select border-0 bg-light px-4 py-3 shadow-none @error('status') is-invalid @enderror" required>
                                 <option value="open" {{ old('status', $ticket->status) == 'open' ? 'selected' : '' }}>
                                     Open</option>
                                 <option value="in_progress"
@@ -73,12 +92,17 @@
                                 <option value="closed" {{ old('status', $ticket->status) == 'closed' ? 'selected' : '' }}>
                                     Closed</option>
                             </select>
+                            
+                            @error('status')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
+                        {{-- Per-field Error Display: Priority --}}
                         <div class="col-md-6">
                             <label for="priority" class="form-label fw-bold small text-muted">UBAH PRIORITAS</label>
                             <select name="priority" id="priority"
-                                class="form-select border-0 bg-light px-4 py-3 shadow-none" required>
+                                class="form-select border-0 bg-light px-4 py-3 shadow-none @error('priority') is-invalid @enderror" required>
                                 <option value="low" {{ old('priority', $ticket->priority) == 'low' ? 'selected' : '' }}>
                                     Low</option>
                                 <option value="medium"
@@ -86,13 +110,21 @@
                                 <option value="high"
                                     {{ old('priority', $ticket->priority) == 'high' ? 'selected' : '' }}>High</option>
                             </select>
+                            
+                            @error('priority')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
+                        {{-- Per-field Error Display: Description --}}
                         <div class="col-12">
                             <label for="description" class="form-label fw-bold small text-muted">DESKRIPSI LENGKAP</label>
-                            <textarea name="description" id="description" class="form-control border-0 bg-light px-4 py-3" rows="5" required>{{ old('description', $ticket->description) }}</textarea>
+                            <textarea name="description" id="description" 
+                                class="form-control border-0 bg-light px-4 py-3 @error('description') is-invalid @enderror" 
+                                rows="5" required>{{ old('description', $ticket->description) }}</textarea>
+                            
                             @error('description')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -139,6 +171,13 @@
             background-color: #f1f3f5 !important;
             box-shadow: none;
             border: 1px solid var(--primary-soft) !important;
+        }
+
+        /* Styling tambahan agar outline merah terlihat jelas jika error */
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            background-image: none !important;
+            border: 1px solid #dc3545 !important;
         }
 
         .letter-spacing-1 {

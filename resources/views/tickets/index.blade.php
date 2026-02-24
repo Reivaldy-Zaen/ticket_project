@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('partials.security-popup')
 <div class="row g-4 mb-5">
     <div class="col-md-4">
         <div class="card p-3 border-bottom border-warning border-5 h-100">

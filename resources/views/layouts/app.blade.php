@@ -109,6 +109,18 @@
                                 <i class="bi bi-ticket-detailed me-1"></i> Tickets
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium {{ request()->routeIs('security-testing.*') ? 'text-primary' : '' }}"
+                                href="{{ route('security-testing.index') }}">
+                                <i class="bi bi-shield-check me-1"></i> Security Testing
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium {{ request()->routeIs('validation-lab.*') ? 'text-primary' : '' }}"
+                                href="{{ route('validation-lab.index') }}">
+                                <i class="bi bi-shield-check me-1"></i> Validation Lab
+                            </a>
+                        </li>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle fw-medium" href="#" role="button"
