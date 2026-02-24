@@ -4,7 +4,9 @@
 
 @section('content')
 <div class="container-fluid px-md-5">
-    <div class="row g-0 shadow-lg rounded-4 overflow-hidden border bg-white" style="min-height: 80vh;">
+    <div class="row g-0 shadow-lg rounded-4 overflow-hidden border bg-white" style="min-height: 80vh; max-height: 85vh;">
+        
+        {{-- PANEL KIRI: INFO & PETUNJUK --}}
         <div class="col-md-5 bg-light p-5 d-flex flex-column justify-content-center border-end">
             <div class="mb-4">
                 <a href="{{ route('tickets.index') }}" class="btn btn-white shadow-sm rounded-pill px-4 mb-4 text-dark border">
@@ -31,82 +33,87 @@
             </div>
         </div>
 
-        {{-- PANEL KANAN: FORM --}}
-        <div class="col-md-7 p-5 bg-white d-flex flex-column justify-content-center">
+        {{-- PANEL KANAN: FORM (Diperbaiki agar bisa di-scroll) --}}
+        <div class="col-md-7 p-5 bg-white scrollable-panel d-flex flex-column">
             
-            {{-- 1. Global Error Display --}}
-            @if ($errors->any())
-                <div class="alert alert-danger shadow-sm rounded-3 mb-4 border-0 border-start border-danger border-4">
-                    <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Oops! Ada kesalahan:</h6>
-                    <ul class="mb-0 small">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('tickets.store') }}" method="POST" class="w-100">
-                @csrf
-                <div class="row g-4">
-                    
-                    {{-- 2. Per-field Error Display: Title --}}
-                    <div class="col-12">
-                        <label for="title" class="form-label fw-bold small text-muted">JUDUL TIKET</label>
-                        <input type="text" 
-                               name="title" 
-                               id="title" 
-                               class="form-control form-control-lg border-0 bg-light px-4 py-3 @error('title') is-invalid @enderror" 
-                               value="{{ old('title') }}" 
-                               placeholder="Apa kendala Anda?" 
-                               required>
-                        
-                        @error('title') 
-                            <div class="invalid-feedback">{{ $message }}</div> 
-                        @enderror
+            {{-- Wrapper my-auto memastikan form ke tengah jika pendek, dan scroll normal jika panjang --}}
+            <div class="my-auto w-100">
+                
+                {{-- 1. Global Error Display --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger shadow-sm rounded-3 mb-4 border-0 border-start border-danger border-4">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Oops! Ada kesalahan:</h6>
+                        <ul class="mb-0 small">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
+                @endif
 
-                    {{-- Per-field Error Display: Priority --}}
-                    <div class="col-md-12">
-                        <label for="priority" class="form-label fw-bold small text-muted">TINGKAT PRIORITAS</label>
-                        <div class="d-flex gap-2">
-                            <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="low" value="low" required {{ old('priority', 'medium') == 'low' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="low">Low</label>
-
-                            <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="medium" value="medium" {{ old('priority', 'medium') == 'medium' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="medium">Medium</label>
-
-                            <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="high" value="high" {{ old('priority') == 'high' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="high">High</label>
+                <form action="{{ route('tickets.store') }}" method="POST" class="w-100">
+                    @csrf
+                    <div class="row g-4">
+                        
+                        {{-- 2. Per-field Error Display: Title --}}
+                        <div class="col-12">
+                            <label for="title" class="form-label fw-bold small text-muted">JUDUL TIKET</label>
+                            <input type="text" 
+                                   name="title" 
+                                   id="title" 
+                                   class="form-control form-control-lg border-0 bg-light px-4 py-3 @error('title') is-invalid @enderror" 
+                                   value="{{ old('title') }}" 
+                                   placeholder="Apa kendala Anda?" 
+                                   required>
+                            
+                            @error('title') 
+                                <div class="invalid-feedback">{{ $message }}</div> 
+                            @enderror
                         </div>
-                        
-                        @error('priority') 
-                            <div class="invalid-feedback d-block">{{ $message }}</div> 
-                        @enderror
-                    </div>
 
-                    {{-- Per-field Error Display: Description --}}
-                    <div class="col-12">
-                        <label for="description" class="form-label fw-bold small text-muted">DESKRIPSI MASALAH</label>
-                        <textarea name="description" 
-                                  id="description" 
-                                  class="form-control border-0 bg-light px-4 py-3 @error('description') is-invalid @enderror" 
-                                  rows="4" 
-                                  placeholder="Ceritakan detail masalahnya di sini..." 
-                                  required>{{ old('description') }}</textarea>
-                        
-                        @error('description') 
-                            <div class="invalid-feedback">{{ $message }}</div> 
-                        @enderror
-                    </div>
+                        {{-- Per-field Error Display: Priority --}}
+                        <div class="col-md-12">
+                            <label for="priority" class="form-label fw-bold small text-muted">TINGKAT PRIORITAS</label>
+                            <div class="d-flex gap-2">
+                                <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="low" value="low" required {{ old('priority', 'medium') == 'low' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="low">Low</label>
 
-                    <div class="col-12 mt-4 text-end">
-                        <button type="submit" class="btn btn-primary btn-lg px-5 py-3 shadow-lg border-0 w-100 w-md-auto">
-                            Kirim Tiket Sekarang <i class="bi bi-arrow-right ms-2"></i>
-                        </button>
+                                <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="medium" value="medium" {{ old('priority', 'medium') == 'medium' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="medium">Medium</label>
+
+                                <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="high" value="high" {{ old('priority') == 'high' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="high">High</label>
+                            </div>
+                            
+                            @error('priority') 
+                                <div class="invalid-feedback d-block">{{ $message }}</div> 
+                            @enderror
+                        </div>
+
+                        {{-- Per-field Error Display: Description --}}
+                        <div class="col-12">
+                            <label for="description" class="form-label fw-bold small text-muted">DESKRIPSI MASALAH</label>
+                            <textarea name="description" 
+                                      id="description" 
+                                      class="form-control border-0 bg-light px-4 py-3 @error('description') is-invalid @enderror" 
+                                      rows="4" 
+                                      placeholder="Ceritakan detail masalahnya di sini..." 
+                                      required>{{ old('description') }}</textarea>
+                            
+                            @error('description') 
+                                <div class="invalid-feedback">{{ $message }}</div> 
+                            @enderror
+                        </div>
+
+                        <div class="col-12 mt-4 text-end">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 shadow-lg border-0 w-100 w-md-auto">
+                                Kirim Tiket Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -117,11 +124,31 @@
             overflow: hidden;
             height: 100vh;
         }
-        main.container-fluid {
+        main.container-fluid, main.container {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: calc(100vh - 160px); /* Menyesuaikan navbar & footer */
+            height: calc(100vh - 100px); 
+        }
+
+        /* Styling Scrollbar Kustom untuk Panel Kanan */
+        .scrollable-panel {
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .scrollable-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrollable-panel::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 10px;
+        }
+        .scrollable-panel::-webkit-scrollbar-thumb {
+            background: #c1c1c1; 
+            border-radius: 10px;
+        }
+        .scrollable-panel::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8; 
         }
     }
 
