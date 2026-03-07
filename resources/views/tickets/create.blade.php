@@ -17,33 +17,31 @@
             </div>
 
             <div class="mt-4">
-                <h6 class="fw-bold mb-3 text-uppercase small text-muted letter-spacing-1">Petunjuk Pengisian:</h6>
+                <h6 class="fw-bold mb-3 text-uppercase small text-muted letter-spacing-1">Keamanan & Validasi:</h6>
                 <div class="d-flex mb-3">
-                    <div class="me-3"><i class="bi bi-1-circle-fill text-primary" style="color: var(--primary-soft) !important;"></i></div>
-                    <p class="small mb-0 text-muted">Gunakan judul yang spesifik agar tim kami cepat memahami masalah.</p>
+                    <div class="me-3"><i class="bi bi-shield-check text-success"></i></div>
+                    <p class="small mb-0 text-muted"><b>CSRF Protection:</b> Form ini dilindungi dari serangan Cross-Site Request Forgery.</p>
                 </div>
                 <div class="d-flex mb-3">
-                    <div class="me-3"><i class="bi bi-2-circle-fill text-primary" style="color: var(--primary-soft) !important;"></i></div>
-                    <p class="small mb-0 text-muted">Pilih prioritas yang sesuai dengan tingkat urgensi masalah Anda.</p>
+                    <div class="me-3"><i class="bi bi-lock text-success"></i></div>
+                    <p class="small mb-0 text-muted"><b>Server Validation:</b> Input divalidasi ketat di sisi server (StoreTicketRequest).</p>
                 </div>
                 <div class="d-flex">
-                    <div class="me-3"><i class="bi bi-3-circle-fill text-primary" style="color: var(--primary-soft) !important;"></i></div>
-                    <p class="small mb-0 text-muted">Lampirkan detail atau pesan error untuk mempercepat investigasi.</p>
+                    <div class="me-3"><i class="bi bi-regex text-success"></i></div>
+                    <p class="small mb-0 text-muted"><b>XSS Sanitization:</b> Tag HTML berbahaya akan otomatis dibersihkan oleh sistem.</p>
                 </div>
             </div>
         </div>
 
-        {{-- PANEL KANAN: FORM (Diperbaiki agar bisa di-scroll) --}}
+        {{-- PANEL KANAN: FORM --}}
         <div class="col-md-7 p-5 bg-white scrollable-panel d-flex flex-column">
-            
-            {{-- Wrapper my-auto memastikan form ke tengah jika pendek, dan scroll normal jika panjang --}}
             <div class="my-auto w-100">
                 
-                {{-- 1. Global Error Display --}}
+                {{-- Global Error Display --}}
                 @if ($errors->any())
                     <div class="alert alert-danger shadow-sm rounded-3 mb-4 border-0 border-start border-danger border-4">
-                        <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Oops! Ada kesalahan:</h6>
-                        <ul class="mb-0 small">
+                        <h6 class="fw-bold mb-2 small"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terdapat kesalahan pada input:</h6>
+                        <ul class="mb-0 x-small">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -55,120 +53,70 @@
                     @csrf
                     <div class="row g-4">
                         
-                        {{-- 2. Per-field Error Display: Title --}}
+                        {{-- Judul Tiket --}}
                         <div class="col-12">
-                            <label for="title" class="form-label fw-bold small text-muted">JUDUL TIKET</label>
-                            <input type="text" 
-                                   name="title" 
-                                   id="title" 
-                                   class="form-control form-control-lg border-0 bg-light px-4 py-3 @error('title') is-invalid @enderror" 
-                                   value="{{ old('title') }}" 
-                                   placeholder="Apa kendala Anda?" 
-                                   required>
-                            
-                            @error('title') 
-                                <div class="invalid-feedback">{{ $message }}</div> 
-                            @enderror
+                            <label for="title" class="form-label fw-bold small text-muted text-uppercase letter-spacing-1">Judul Tiket <span class="text-danger">*</span></label>
+                            <input type="text" name="title" id="title" 
+                                class="form-control form-control-lg border-0 bg-light px-4 py-3 @error('title') is-invalid @enderror" 
+                                value="{{ old('title') }}" placeholder="Apa kendala Anda?" required>
+                            @error('title') <div class="invalid-feedback small">{{ $message }}</div> @enderror
                         </div>
 
-                        {{-- Per-field Error Display: Priority --}}
+                        {{-- Prioritas --}}
                         <div class="col-md-12">
-                            <label for="priority" class="form-label fw-bold small text-muted">TINGKAT PRIORITAS</label>
+                            <label class="form-label fw-bold small text-muted text-uppercase letter-spacing-1">Tingkat Prioritas <span class="text-danger">*</span></label>
                             <div class="d-flex gap-2">
-                                <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="low" value="low" required {{ old('priority', 'medium') == 'low' ? 'checked' : '' }}>
+                                <input type="radio" class="btn-check" name="priority" id="low" value="low" required {{ old('priority') == 'low' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="low">Low</label>
 
-                                <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="medium" value="medium" {{ old('priority', 'medium') == 'medium' ? 'checked' : '' }}>
+                                <input type="radio" class="btn-check" name="priority" id="medium" value="medium" {{ old('priority', 'medium') == 'medium' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="medium">Medium</label>
 
-                                <input type="radio" class="btn-check @error('priority') is-invalid @enderror" name="priority" id="high" value="high" {{ old('priority') == 'high' ? 'checked' : '' }}>
+                                <input type="radio" class="btn-check" name="priority" id="high" value="high" {{ old('priority') == 'high' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-light border text-muted flex-grow-1 py-3 rounded-3" for="high">High</label>
                             </div>
-                            
-                            @error('priority') 
-                                <div class="invalid-feedback d-block">{{ $message }}</div> 
-                            @enderror
+                            @error('priority') <div class="text-danger x-small mt-2">{{ $message }}</div> @enderror
                         </div>
 
-                        {{-- Per-field Error Display: Description --}}
+                        {{-- Kategori --}}
                         <div class="col-12">
-                            <label for="description" class="form-label fw-bold small text-muted">DESKRIPSI MASALAH</label>
-                            <textarea name="description" 
-                                      id="description" 
-                                      class="form-control border-0 bg-light px-4 py-3 @error('description') is-invalid @enderror" 
-                                      rows="4" 
-                                      placeholder="Ceritakan detail masalahnya di sini..." 
-                                      required>{{ old('description') }}</textarea>
-                            
-                            @error('description') 
-                                <div class="invalid-feedback">{{ $message }}</div> 
-                            @enderror
+                            <label for="category" class="form-label fw-bold small text-muted text-uppercase letter-spacing-1">Kategori (Opsional)</label>
+                            <input type="text" name="category" id="category" 
+                                class="form-control border-0 bg-light px-4 py-3 @error('category') is-invalid @enderror" 
+                                value="{{ old('category') }}" placeholder="Contoh: Teknis, Akun, Pembayaran">
+                            @error('category') <div class="invalid-feedback small">{{ $message }}</div> @enderror
+                        </div>
+
+                        {{-- Deskripsi --}}
+                        <div class="col-12">
+                            <label for="description" class="form-label fw-bold small text-muted text-uppercase letter-spacing-1">Deskripsi Masalah <span class="text-danger">*</span></label>
+                            <textarea name="description" id="description" 
+                                class="form-control border-0 bg-light px-4 py-3 @error('description') is-invalid @enderror" 
+                                rows="4" placeholder="Ceritakan detail masalahnya di sini..." required>{{ old('description') }}</textarea>
+                            @error('description') <div class="invalid-feedback small">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="col-12 mt-4 text-end">
-                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 shadow-lg border-0 w-100 w-md-auto">
-                                Kirim Tiket Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 shadow-lg border-0 w-100 w-md-auto fw-bold">
+                                Kirim Tiket Sekarang <i class="bi bi-send ms-2"></i>
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
-            
         </div>
     </div>
 </div>
 
 <style>
     @media (min-width: 992px) {
-        body {
-            overflow: hidden;
-            height: 100vh;
-        }
-        main.container-fluid, main.container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: calc(100vh - 100px); 
-        }
-
-        /* Styling Scrollbar Kustom untuk Panel Kanan */
-        .scrollable-panel {
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        .scrollable-panel::-webkit-scrollbar {
-            width: 8px;
-        }
-        .scrollable-panel::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-            border-radius: 10px;
-        }
-        .scrollable-panel::-webkit-scrollbar-thumb {
-            background: #c1c1c1; 
-            border-radius: 10px;
-        }
-        .scrollable-panel::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8; 
-        }
+        body { overflow: hidden; height: 100vh; }
+        main.container-fluid { display: flex; align-items: center; justify-content: center; height: calc(100vh - 100px); }
+        .scrollable-panel { max-height: 85vh; overflow-y: auto; }
     }
-
-    .form-control:focus {
-        background-color: #f1f3f5 !important;
-        box-shadow: none;
-        border: 1px solid var(--primary-soft) !important;
-    }
-
-    .form-control.is-invalid {
-        background-image: none !important; 
-        border: 1px solid #dc3545 !important;
-    }
-
-    .btn-check:checked + .btn-outline-light {
-        background-color: var(--primary-soft) !important;
-        color: white !important;
-        border-color: var(--primary-soft) !important;
-    }
-
+    .form-control:focus { background-color: #fff !important; box-shadow: 0 0 0 0.25rem rgba(110, 191, 185, 0.25); border: 1px solid var(--primary-soft) !important; }
+    .btn-check:checked + .btn-outline-light { background-color: var(--primary-soft) !important; color: white !important; border-color: var(--primary-soft) !important; }
+    .x-small { font-size: 0.75rem; }
     .letter-spacing-1 { letter-spacing: 1px; }
 </style>
 @endsection

@@ -94,7 +94,6 @@
                         <div class="border-bottom pb-3 mb-3">
                             <div class="d-flex justify-content-between">
                                 <strong>
-                                    {{-- ✅ SECURE! Auto-escape dengan {{ }} --}}
                                     {{ $comment->author_name }}
                                 </strong>
                                 <small class="text-muted">
@@ -102,8 +101,6 @@
                                 </small>
                             </div>
                             <div class="mt-2">
-                                {{-- ✅ SECURE! Auto-escape dengan {{ }} --}}
-                                {{-- nl2br + e() untuk preserve line breaks dengan aman --}}
                                 {!! nl2br(e($comment->content)) !!}
                             </div>
                         </div>

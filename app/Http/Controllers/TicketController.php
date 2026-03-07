@@ -2,155 +2,139 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTicketRequest;
+use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Ticket;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the tickets.
-     * 
-     * GET /tickets
-     * 
-     * @return View
-     */
-    public function index(): View
+    use AuthorizesRequests;
+
+    public function index(Request $request): View
     {
-        // Mengambil semua tiket dengan eager loading user
-        // Eager loading mencegah N+1 query problem
-        $tickets = Ticket::with('user')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $this->authorize('viewAny', Ticket::class);
+
+        $user = $request->user();
+        $query = Ticket::with(['user', 'assignee']);
+
+        if ($user->isUser()) {
+            $query->where('user_id', $user->id);
+        } elseif ($user->isStaff()) {
+            $query->orderByRaw('CASE WHEN assigned_to = ? THEN 0 ELSE 1 END', [$user->id]);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $tickets = $query->latest()->paginate(10);
 
         return view('tickets.index', compact('tickets'));
     }
 
-    /**
-     * Show the form for creating a new ticket.
-     * 
-     * GET /tickets/create
-     * 
-     * @return View
-     */
     public function create(): View
     {
+        $this->authorize('create', Ticket::class);
+
         return view('tickets.create');
     }
 
-    /**
-     * Store a newly created ticket in storage.
-     * 
-     * POST /tickets
-     * 
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreTicketRequest $request): RedirectResponse
     {
-        // Validasi input
-        // Jika gagal, otomatis redirect back dengan error messages
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|min:10',
-            'priority' => 'required|in:low,medium,high',
-        ]);
+        $this->authorize('create', Ticket::class);
 
-        // Tambahkan user_id dari user yang sedang login
-        // Untuk sementara, kita hardcode user_id = 1 (untuk testing)
-        // Nanti di materi Auth akan diganti dengan auth()->id()
-        $validated['user_id'] = Auth::id();
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = $request->user()->id;
+        $validatedData['status'] = 'open';
 
-        // Simpan tiket baru
-        $ticket = Ticket::create($validated);
+        $ticket = Ticket::create($validatedData);
 
-        // Redirect ke halaman index dengan pesan sukses
         return redirect()
-            ->route('tickets.index')
+            ->route('tickets.show', $ticket)
             ->with('success', 'Tiket berhasil dibuat!');
     }
 
-    /**
-     * Display the specified ticket.
-     * 
-     * GET /tickets/{ticket}
-     * 
-     * @param Ticket $ticket - Route Model Binding
-     * @return View
-     */
     public function show(Ticket $ticket): View
     {
-        // Laravel otomatis mencari Ticket berdasarkan ID dari URL
-        // Jika tidak ditemukan, otomatis return 404
+        $this->authorize('view', $ticket);
 
-        // Load relasi user
-        $ticket->load('user');
+        $ticket->load(['user', 'assignee']);
 
-        return view('tickets.show', compact('ticket'));
+        $staffList = [];
+        if (Gate::allows('assign-tickets')) {
+            $staffList = User::whereIn('role', ['staff', 'admin'])->get();
+        }
+
+        return view('tickets.show', compact('ticket', 'staffList'));
     }
 
-    /**
-     * Show the form for editing the specified ticket.
-     * 
-     * GET /tickets/{ticket}/edit
-     * 
-     * @param Ticket $ticket
-     * @return View
-     */
     public function edit(Ticket $ticket): View
     {
+        $this->authorize('update', $ticket);
+
         return view('tickets.edit', compact('ticket'));
     }
 
-    /**
-     * Update the specified ticket in storage.
-     * 
-     * PUT/PATCH /tickets/{ticket}
-     * 
-     * @param Request $request
-     * @param Ticket $ticket
-     * @return RedirectResponse
-     */
-    public function update(Request $request, Ticket $ticket): RedirectResponse
+    public function update(UpdateTicketRequest $request, Ticket $ticket): RedirectResponse
     {
-        // Validasi input
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|min:10',
-            'status' => 'required|in:open,in_progress,closed',
-            'priority' => 'required|in:low,medium,high',
-        ]);
+        $this->authorize('update', $ticket);
 
-        // Update tiket
-        $ticket->update($validated);
+        $ticket->update($request->validated());
 
-        // Redirect ke halaman detail dengan pesan sukses
         return redirect()
             ->route('tickets.show', $ticket)
-            ->with('success', 'Tiket berhasil diupdate!');
+            ->with('success', 'Tiket berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified ticket from storage.
-     * 
-     * DELETE /tickets/{ticket}
-     * 
-     * @param Ticket $ticket
-     * @return RedirectResponse
-     */
     public function destroy(Ticket $ticket): RedirectResponse
     {
-        // Hapus tiket
+        $this->authorize('delete', $ticket);
+
         $ticket->delete();
 
-        // Redirect ke halaman index dengan pesan sukses
         return redirect()
             ->route('tickets.index')
             ->with('success', 'Tiket berhasil dihapus!');
     }
 
+    public function updateStatus(Request $request, Ticket $ticket): RedirectResponse
+    {
+        $this->authorize('changeStatus', $ticket);
+
+        $validated = $request->validate([
+            'status' => 'required|in:open,in_progress,resolved,closed',
+        ]);
+
+        $ticket->update($validated);
+
+        return back()->with('success', 'Status ticket berhasil diupdate!');
+    }
+
+    public function assign(Request $request, Ticket $ticket): RedirectResponse
+    {
+        $this->authorize('assign', $ticket);
+
+        $validated = $request->validate([
+            'assigned_to' => 'nullable|exists:users,id',
+        ]);
+
+        $ticket->update($validated);
+
+        $message = $validated['assigned_to']
+            ? 'Ticket berhasil di-assign!'
+            : 'Assignment ticket berhasil dihapus!';
+
+        return back()->with('success', $message);
+    }
+
+    // Fungsi dari kode aslimu tetap dipertahankan
     public function vulnerableSearch(Request $request)
     {
         $query = $request->query('q');

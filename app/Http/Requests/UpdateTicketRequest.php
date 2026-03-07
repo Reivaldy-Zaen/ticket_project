@@ -6,13 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTicketRequest extends FormRequest
 {
-
     public function authorize(): bool
     {
+        // Mengambil objek ticket dari route parameter
+        $ticket = $this->route('ticket');
 
-        return true;
+        // SECURITY: Menggunakan Policy untuk mengecek apakah user boleh update tiket ini
+        return $this->user()->can('update', $ticket);
     }
-
 
     protected function prepareForValidation(): void
     {
@@ -24,77 +25,63 @@ class UpdateTicketRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            // Title: wajib, string, 5-255 karakter
+        $rules = [
             'title' => [
                 'required',
                 'string',
                 'min:5',
                 'max:255',
             ],
-            
-            // Description: wajib, string, minimal 20 karakter
             'description' => [
                 'required',
                 'string',
                 'min:20',
             ],
-            
-            // Status: wajib untuk update, whitelist values
-            'status' => [
-                'required',
-                'in:open,in_progress,closed',
-            ],
-            
-            // Priority: wajib, whitelist values
             'priority' => [
                 'required',
                 'in:low,medium,high',
             ],
-            
-            // Category: opsional
             'category' => [
                 'nullable',
                 'string',
                 'max:100',
             ],
         ];
+
+        // SECURITY: Hanya Admin dan Staff yang diizinkan mengirim/mengubah field 'status'
+        if ($this->user()->hasAnyRole(['admin', 'staff'])) {
+            $rules['status'] = [
+                'required',
+                'in:open,in_progress,resolved,closed',
+            ];
+        }
+
+        return $rules;
     }
 
-    /**
-     * Get custom error messages.
-     */
     public function messages(): array
     {
         return [
-            // Title messages
             'title.required' => 'Judul tiket wajib diisi.',
             'title.string' => 'Judul harus berupa teks.',
             'title.min' => 'Judul minimal :min karakter.',
             'title.max' => 'Judul maksimal :max karakter.',
             
-            // Description messages
             'description.required' => 'Deskripsi tiket wajib diisi.',
             'description.string' => 'Deskripsi harus berupa teks.',
             'description.min' => 'Deskripsi minimal :min karakter agar permasalahan jelas.',
             
-            // Status messages
             'status.required' => 'Status tiket wajib dipilih.',
-            'status.in' => 'Status tidak valid. Pilih: Open, In Progress, atau Closed.',
+            'status.in' => 'Status tidak valid. Pilih: Open, In Progress, Resolved, atau Closed.',
             
-            // Priority messages
             'priority.required' => 'Prioritas tiket wajib dipilih.',
             'priority.in' => 'Prioritas tidak valid. Pilih: Low, Medium, atau High.',
             
-            // Category messages
             'category.string' => 'Kategori harus berupa teks.',
             'category.max' => 'Kategori maksimal :max karakter.',
         ];
     }
 
-    /**
-     * Get custom attribute names.
-     */
     public function attributes(): array
     {
         return [
@@ -106,9 +93,6 @@ class UpdateTicketRequest extends FormRequest
         ];
     }
 
-    /**
-     * Handle passed validation.
-     */
     protected function passedValidation(): void
     {
         $this->merge([

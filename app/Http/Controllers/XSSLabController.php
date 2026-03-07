@@ -80,18 +80,17 @@ class XSSLabController extends Controller
 
         public function storedSecureStore(Request $request)
     {
-        // ✅ SECURE: Validasi input dengan proper rules
+
         $validated = $request->validate([
             'ticket_id' => 'required|exists:tickets,id',
             'author_name' => 'required|string|max:100',
             'content' => 'required|string|max:1000',
         ]);
 
-        // Simpan - Blade akan auto-escape saat menampilkan
         Comment::create($validated);
 
         return redirect()->route('xss-lab.stored.secure')
-            ->with('success', 'Komentar berhasil ditambahkan!');
+               ->with('success', 'Komentar berhasil ditambahkan!');
     }
 
 
