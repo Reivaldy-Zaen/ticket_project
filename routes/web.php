@@ -10,8 +10,8 @@ use App\Http\Controllers\VulnerableAuth\VulnerableRegisterController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SecurityTestController;
-use App\Http\Controllers\ValidationLabController; 
-use App\Http\Controllers\CsrfLabController; 
+use App\Http\Controllers\ValidationLabController;
+use App\Http\Controllers\CsrfLabController;
 use App\Http\Controllers\SqliLabController;
 use App\Http\Controllers\AdminController;
 
@@ -120,14 +120,24 @@ Route::prefix('security-testing')->name('security-testing.')->group(function () 
 // AUTH LAB & AUTHORIZATION PAGES
 // ============================================================================
 Route::prefix('auth-lab')->name('auth-lab.')->group(function () {
-    Route::get('/', function () { return view('auth-lab.index'); })->name('index');
-    Route::get('/comparison', function () { return view('auth-lab.comparison'); })->name('comparison');
+    Route::get('/', function () {
+        return view('auth-lab.index');
+    })->name('index');
+    Route::get('/comparison', function () {
+        return view('auth-lab.comparison');
+    })->name('comparison');
 });
 
 Route::prefix('authorization-lab')->name('authorization-lab.')->group(function () {
-    Route::get('/', function () { return view('authorization-lab.index'); })->name('index');
-    Route::get('/login', function () { return view('authorization-lab.login'); })->name('login');
-    Route::get('/implementation', function () { return view('authorization-lab.implementation'); })->name('implementation');
+    Route::get('/', function () {
+        return view('authorization-lab.index');
+    })->name('index');
+    Route::get('/login', function () {
+        return view('authorization-lab.login');
+    })->name('login');
+    Route::get('/implementation', function () {
+        return view('authorization-lab.implementation');
+    })->name('implementation');
 });
 
 // ============================================================================
@@ -135,10 +145,18 @@ Route::prefix('authorization-lab')->name('authorization-lab.')->group(function (
 // ============================================================================
 Route::prefix('bac-lab')->name('bac-lab.')->group(function () {
     // Public routes (tidak perlu login)
-    Route::get('/', function () { return view('bac-lab.index'); })->name('home');
-    Route::get('/comparison', function () { return view('bac-lab.comparison'); })->name('comparison');
-    Route::get('/vulnerable/login', function () { return view('bac-lab.vulnerable.login'); })->name('vulnerable.login');
-    Route::get('/secure/login', function () { return view('bac-lab.secure.login'); })->name('secure.login');
+    Route::get('/', function () {
+        return view('bac-lab.index');
+    })->name('home');
+    Route::get('/comparison', function () {
+        return view('bac-lab.comparison');
+    })->name('comparison');
+    Route::get('/vulnerable/login', function () {
+        return view('bac-lab.vulnerable.login');
+    })->name('vulnerable.login');
+    Route::get('/secure/login', function () {
+        return view('bac-lab.secure.login');
+    })->name('secure.login');
 });
 
 // Protected routes (perlu login)
@@ -170,7 +188,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-    
+
     Route::get('/dashboard', function () {
         return view('auth.dashboard');
     })->name('dashboard');
@@ -216,3 +234,7 @@ Route::prefix('vulnerable')->name('vulnerable.')->group(function () {
     Route::get('/show-users', [VulnerableRegisterController::class, 'showUsers'])->name('show-users');
     Route::get('/brute-force-stats', [VulnerableLoginController::class, 'bruteForceStats'])->name('brute-force-stats');
 });
+
+    Route::get('/error-handling-demo', function () {
+        return view('error-handling-demo.index');
+    })->name('error-handling-demo');
