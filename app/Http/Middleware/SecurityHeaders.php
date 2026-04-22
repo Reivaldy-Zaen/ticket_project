@@ -15,7 +15,7 @@ class SecurityHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        $response = $next($request);
         $response->headers->set('X-Content-Type-Options', 'nosniff');
 
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');

@@ -166,10 +166,21 @@
         }
 
         /* WARNA ANTI-BENTROK UNTUK LAB (PASTEL) */
-        .text-lab-vuln { color: #fecaca !important; }
-        .text-lab-secure { color: #bbf7d0 !important; }
-        .text-lab-info { color: #bae6fd !important; }
-        .text-lab-warn { color: #fef08a !important; }
+        .text-lab-vuln {
+            color: #fecaca !important;
+        }
+
+        .text-lab-secure {
+            color: #bbf7d0 !important;
+        }
+
+        .text-lab-info {
+            color: #bae6fd !important;
+        }
+
+        .text-lab-warn {
+            color: #fef08a !important;
+        }
 
         .nav-collapse {
             list-style: none;
@@ -241,8 +252,13 @@
             font-size: 0.85rem;
         }
 
-        .badge-vulnerable { background-color: #dc3545; }
-        .badge-secure { background-color: #198754; }
+        .badge-vulnerable {
+            background-color: #dc3545;
+        }
+
+        .badge-secure {
+            background-color: #198754;
+        }
 
         .table code {
             background-color: rgba(0, 0, 0, 0.05);
@@ -259,8 +275,15 @@
         }
 
         @keyframes pulse-border {
-            0%, 100% { border-left-color: #dc3545; }
-            50% { border-left-color: #ff6b6b; }
+
+            0%,
+            100% {
+                border-left-color: #dc3545;
+            }
+
+            50% {
+                border-left-color: #ff6b6b;
+            }
         }
 
         .sidebar-overlay {
@@ -279,9 +302,17 @@
         }
 
         @media (max-width: 991.98px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.show { transform: translateX(0); }
-            .main-wrapper { margin-left: 0 !important; }
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
         }
     </style>
     @stack('styles')
@@ -291,7 +322,8 @@
     {{-- SIDEBAR --}}
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a href="{{ url('/') }}" class="logo"><i class="bi bi-shield-lock-fill text-info"></i> SECURE TICKETING</a>
+            <a href="{{ url('/') }}" class="logo"><i class="bi bi-shield-lock-fill text-info"></i> SECURE
+                TICKETING</a>
             <button class="btn text-white d-lg-none p-0" id="sidebarClose"><i class="bi bi-x-lg"></i></button>
         </div>
 
@@ -300,12 +332,19 @@
                 {{-- UTAMA --}}
                 <li class="nav-section">Utama</li>
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
+                        <i class="bi bi-house me-2"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard') }}"
+                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tickets.index') }}" class="nav-link {{ request()->routeIs('tickets.*') ? 'active' : '' }}">
+                    <a href="{{ route('tickets.index') }}"
+                        class="nav-link {{ request()->routeIs('tickets.*') ? 'active' : '' }}">
                         <i class="bi bi-ticket-perforated me-2"></i> Tiket Support
                     </a>
                 </li>
@@ -314,18 +353,22 @@
                 @canany(['access-admin', 'view-reports'])
                     <li class="nav-section">Management</li>
                     <li class="nav-item">
-                        <a href="#adminMenu" class="nav-link dropdown-toggle {{ request()->is('admin*') || request()->is('reports*') ? '' : 'collapsed' }}"
-                            data-bs-toggle="collapse" aria-expanded="{{ request()->is('admin*') || request()->is('reports*') ? 'true' : 'false' }}">
+                        <a href="#adminMenu"
+                            class="nav-link dropdown-toggle {{ request()->is('admin*') || request()->is('reports*') ? '' : 'collapsed' }}"
+                            data-bs-toggle="collapse"
+                            aria-expanded="{{ request()->is('admin*') || request()->is('reports*') ? 'true' : 'false' }}">
                             <i class="bi bi-shield-lock me-2 text-lab-vuln"></i> Admin & Staff
                         </a>
-                        <ul class="collapse nav-collapse {{ request()->is('admin*') || request()->is('reports*') ? 'show' : '' }}" id="adminMenu">
+                        <ul class="collapse nav-collapse {{ request()->is('admin*') || request()->is('reports*') ? 'show' : '' }}"
+                            id="adminMenu">
                             @can('access-admin')
                                 <li><a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard Admin</a></li>
                                 <li><a href="{{ route('admin.users') }}" class="nav-link">Kelola User</a></li>
                                 <li><a href="{{ route('admin.tickets') }}" class="nav-link">Semua Tiket</a></li>
                             @endcan
                             @can('view-reports')
-                                <li><a href="{{ route('admin.reports') }}" class="nav-link text-lab-info">Statistik & Laporan</a></li>
+                                <li><a href="{{ route('admin.reports') }}" class="nav-link text-lab-info">Statistik &
+                                        Laporan</a></li>
                             @endcan
                         </ul>
                     </li>
@@ -334,17 +377,21 @@
                 {{-- BLADE DEMO --}}
                 <li class="nav-section">Blade Demo</li>
                 <li class="nav-item">
-                    <a href="#bladeMenu" class="nav-link dropdown-toggle {{ request()->is('demo-blade*') || request()->routeIs('error-handling-demo') ? '' : 'collapsed' }}"
-                        data-bs-toggle="collapse" aria-expanded="{{ request()->is('demo-blade*') || request()->routeIs('error-handling-demo') ? 'true' : 'false' }}">
+                    <a href="#bladeMenu"
+                        class="nav-link dropdown-toggle {{ request()->is('demo-blade*') || request()->routeIs('error-handling-demo') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse"
+                        aria-expanded="{{ request()->is('demo-blade*') || request()->routeIs('error-handling-demo') ? 'true' : 'false' }}">
                         <i class="bi bi-code-slash me-2 text-lab-secure"></i> Blade Templating
                     </a>
-                    <ul class="collapse nav-collapse {{ request()->is('demo-blade*') || request()->routeIs('error-handling-demo') ? 'show' : '' }}" id="bladeMenu">
+                    <ul class="collapse nav-collapse {{ request()->is('demo-blade*') || request()->routeIs('error-handling-demo') ? 'show' : '' }}"
+                        id="bladeMenu">
                         <li><a href="{{ route('demo-blade.index') }}" class="nav-link">Overview</a></li>
                         <li><a href="{{ route('demo-blade.directives') }}" class="nav-link">Directives</a></li>
                         <li><a href="{{ route('demo-blade.components') }}" class="nav-link">Components</a></li>
                         <li><a href="{{ route('demo-blade.includes') }}" class="nav-link">Includes</a></li>
                         <li><a href="{{ route('demo-blade.stacks') }}" class="nav-link">Stacks & Push</a></li>
-                        <li><a href="{{ route('error-handling-demo') }}" class="nav-link text-lab-warn">Error Handling</a></li>
+                        <li><a href="{{ route('error-handling-demo') }}" class="nav-link text-lab-warn">Error
+                                Handling</a></li>
                     </ul>
                 </li>
 
@@ -353,7 +400,8 @@
 
                 {{-- BAC/IDOR LAB --}}
                 <li class="nav-item">
-                    <a href="#bacLabMenu" class="nav-link dropdown-toggle {{ request()->is('bac-lab*') ? '' : 'collapsed' }}"
+                    <a href="#bacLabMenu"
+                        class="nav-link dropdown-toggle {{ request()->is('bac-lab*') ? '' : 'collapsed' }}"
                         data-bs-toggle="collapse" aria-expanded="{{ request()->is('bac-lab*') ? 'true' : 'false' }}">
                         <i class="bi bi-door-open me-2 text-lab-warn"></i> BAC/IDOR Lab
                     </a>
@@ -361,103 +409,166 @@
                         <li><a href="{{ route('bac-lab.home') }}" class="nav-link">Overview</a></li>
                         <li><a href="{{ route('bac-lab.comparison') }}" class="nav-link">Comparison</a></li>
                         @auth
-                            <li><a href="{{ route('bac-lab.vulnerable.tickets.index') }}" class="nav-link text-lab-vuln">Vulnerable (IDOR) Tickets</a></li>
-                            <li><a href="{{ route('bac-lab.secure.tickets.index') }}" class="nav-link text-lab-secure">Secure (Policy) Tickets</a></li>
+                            <li><a href="{{ route('bac-lab.vulnerable.tickets.index') }}"
+                                    class="nav-link text-lab-vuln">Vulnerable (IDOR) Tickets</a></li>
+                            <li><a href="{{ route('bac-lab.secure.tickets.index') }}"
+                                    class="nav-link text-lab-secure">Secure (Policy) Tickets</a></li>
                         @else
-                            <li><a href="{{ route('bac-lab.vulnerable.login') }}" class="nav-link text-lab-vuln">Vulnerable (IDOR) Login</a></li>
-                            <li><a href="{{ route('bac-lab.secure.login') }}" class="nav-link text-lab-secure">Secure (Policy) Login</a></li>
+                            <li><a href="{{ route('bac-lab.vulnerable.login') }}" class="nav-link text-lab-vuln">Vulnerable
+                                    (IDOR)
+                                    Login</a></li>
+                            <li><a href="{{ route('bac-lab.secure.login') }}" class="nav-link text-lab-secure">Secure
+                                    (Policy) Login</a></li>
                         @endauth
                     </ul>
                 </li>
 
                 {{-- SQLi --}}
                 <li class="nav-item">
-                    <a href="#sqliMenu" class="nav-link dropdown-toggle {{ request()->is('sqli-lab*') ? '' : 'collapsed' }}"
+                    <a href="#sqliMenu"
+                        class="nav-link dropdown-toggle {{ request()->is('sqli-lab*') ? '' : 'collapsed' }}"
                         data-bs-toggle="collapse" aria-expanded="{{ request()->is('sqli-lab*') ? 'true' : 'false' }}">
                         <i class="bi bi-database-fill-exclamation me-2"></i> SQLi Lab
                     </a>
                     <ul class="collapse nav-collapse {{ request()->is('sqli-lab*') ? 'show' : '' }}" id="sqliMenu">
                         <li><a href="{{ route('sqli-lab.index') }}" class="nav-link">Overview</a></li>
-                        <li><a href="{{ route('sqli-lab.how-it-works') }}" class="nav-link text-lab-info">How it Works</a></li>
-                        <li><a href="{{ route('sqli-lab.vulnerable-search') }}" class="nav-link text-lab-vuln">Vuln Search</a></li>
-                        <li><a href="{{ route('sqli-lab.vulnerable-login') }}" class="nav-link text-lab-vuln">Login Bypass</a></li>
-                        <li><a href="{{ route('sqli-lab.blind-sqli') }}" class="nav-link text-lab-vuln">Blind SQLi</a></li>
-                        <li><a href="{{ route('sqli-lab.secure-search') }}" class="nav-link text-lab-secure">Secure Search</a></li>
+                        <li><a href="{{ route('sqli-lab.how-it-works') }}" class="nav-link text-lab-info">How it
+                                Works</a></li>
+                        <li><a href="{{ route('sqli-lab.vulnerable-search') }}" class="nav-link text-lab-vuln">Vuln
+                                Search</a></li>
+                        <li><a href="{{ route('sqli-lab.vulnerable-login') }}" class="nav-link text-lab-vuln">Login
+                                Bypass</a></li>
+                        <li><a href="{{ route('sqli-lab.blind-sqli') }}" class="nav-link text-lab-vuln">Blind
+                                SQLi</a></li>
+                        <li><a href="{{ route('sqli-lab.secure-search') }}" class="nav-link text-lab-secure">Secure
+                                Search</a></li>
                         <li><a href="{{ route('sqli-lab.cheatsheet') }}" class="nav-link">Cheatsheet</a></li>
                     </ul>
                 </li>
 
                 {{-- XSS --}}
                 <li class="nav-item">
-                    <a href="#xssMenu" class="nav-link dropdown-toggle {{ request()->is('xss-lab*') ? '' : 'collapsed' }}"
+                    <a href="#xssMenu"
+                        class="nav-link dropdown-toggle {{ request()->is('xss-lab*') ? '' : 'collapsed' }}"
                         data-bs-toggle="collapse" aria-expanded="{{ request()->is('xss-lab*') ? 'true' : 'false' }}">
                         <i class="bi bi-braces-asterisk me-2"></i> XSS Lab
                     </a>
                     <ul class="collapse nav-collapse {{ request()->is('xss-lab*') ? 'show' : '' }}" id="xssMenu">
                         <li><a href="{{ route('xss-lab.index') }}" class="nav-link">Overview</a></li>
-                        <li><a href="{{ route('xss-lab.reflected.vulnerable') }}" class="nav-link text-lab-vuln">Reflected (Vuln)</a></li>
-                        <li><a href="{{ route('xss-lab.stored.vulnerable') }}" class="nav-link text-lab-vuln">Stored (Vuln)</a></li>
-                        <li><a href="{{ route('xss-lab.dom.vulnerable') }}" class="nav-link text-lab-vuln">DOM (Vuln)</a></li>
-                        <li><a href="{{ route('xss-lab.reflected.secure') }}" class="nav-link text-lab-secure">Secure Mode</a></li>
+                        <li><a href="{{ route('xss-lab.reflected.vulnerable') }}"
+                                class="nav-link text-lab-vuln">Reflected (Vuln)</a></li>
+                        <li><a href="{{ route('xss-lab.reflected.secure') }}"
+                                class="nav-link text-lab-secure">Reflected (Secure)</a></li>
+                        <li><a href="{{ route('xss-lab.stored.vulnerable') }}" class="nav-link text-lab-vuln">Stored
+                                (Vuln)</a></li>
+                        <li><a href="{{ route('xss-lab.stored.secure') }}" class="nav-link text-lab-secure">Stored
+                                (Secure)</a></li>
+                        <li><a href="{{ route('xss-lab.dom.vulnerable') }}" class="nav-link text-lab-vuln">DOM
+                                (Vuln)</a></li>
+                        <li><a href="{{ route('xss-lab.dom.secure') }}" class="nav-link text-lab-secure">DOM
+                                (Secure)</a></li>
                     </ul>
                 </li>
 
                 {{-- CSRF & Validation --}}
                 <li class="nav-item">
-                    <a href="#csrfMenu" class="nav-link dropdown-toggle {{ request()->is('csrf-lab*') || request()->is('validation-lab*') ? '' : 'collapsed' }}"
-                        data-bs-toggle="collapse" aria-expanded="{{ request()->is('csrf-lab*') || request()->is('validation-lab*') ? 'true' : 'false' }}">
+                    <a href="#csrfMenu"
+                        class="nav-link dropdown-toggle {{ request()->is('csrf-lab*') || request()->is('validation-lab*') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse"
+                        aria-expanded="{{ request()->is('csrf-lab*') || request()->is('validation-lab*') ? 'true' : 'false' }}">
                         <i class="bi bi-shield-shaded me-2"></i> CSRF & Validation
                     </a>
-                    <ul class="collapse nav-collapse {{ request()->is('csrf-lab*') || request()->is('validation-lab*') ? 'show' : '' }}" id="csrfMenu">
+                    <ul class="collapse nav-collapse {{ request()->is('csrf-lab*') || request()->is('validation-lab*') ? 'show' : '' }}"
+                        id="csrfMenu">
                         <li><a href="{{ route('csrf-lab.index') }}" class="nav-link">CSRF Overview</a></li>
-                        <li><a href="{{ route('csrf-lab.how-it-works') }}" class="nav-link text-lab-info">CSRF logic</a></li>
-                        <li><a href="{{ route('csrf-lab.attack-demo') }}" class="nav-link text-lab-vuln">CSRF Attack</a></li>
-                        <li><a href="{{ route('csrf-lab.protection-demo') }}" class="nav-link text-lab-secure">CSRF Protect</a></li>
-                        <li><a href="{{ route('csrf-lab.ajax-demo') }}" class="nav-link text-lab-warn">AJAX CSRF</a></li>
+                        <li><a href="{{ route('csrf-lab.how-it-works') }}" class="nav-link text-lab-info">CSRF
+                                logic</a></li>
+                        <li><a href="{{ route('csrf-lab.attack-demo') }}" class="nav-link text-lab-vuln">CSRF
+                                Attack</a></li>
+                        <li><a href="{{ route('csrf-lab.protection-demo') }}" class="nav-link text-lab-secure">CSRF
+                                Protect</a></li>
+                        <li><a href="{{ route('csrf-lab.ajax-demo') }}" class="nav-link text-lab-warn">AJAX CSRF</a>
+                        </li>
                         <li><a href="{{ route('validation-lab.index') }}" class="nav-link">Validation Lab</a></li>
-                        <li><a href="{{ route('validation-lab.vulnerable') }}" class="nav-link text-lab-vuln">Vuln Form</a></li>
-                        <li><a href="{{ route('validation-lab.secure') }}" class="nav-link text-lab-secure">Secure Form</a></li>
+                        <li><a href="{{ route('validation-lab.vulnerable') }}" class="nav-link text-lab-vuln">Vuln
+                                Form</a></li>
+                        <li><a href="{{ route('validation-lab.secure') }}" class="nav-link text-lab-secure">Secure
+                                Form</a></li>
                     </ul>
                 </li>
 
                 {{-- AUTH & OTORISASI LABS --}}
                 <li class="nav-section">Auth & Otorisasi</li>
                 <li class="nav-item">
-                    <a href="#authLabFull" class="nav-link dropdown-toggle {{ request()->is('auth-lab*') || request()->is('authorization-lab*') || request()->is('vulnerable*') || request()->routeIs('login') || request()->routeIs('register') ? '' : 'collapsed' }}"
-                        data-bs-toggle="collapse" aria-expanded="{{ request()->is('auth-lab*') || request()->is('authorization-lab*') || request()->is('vulnerable*') || request()->routeIs('login') || request()->routeIs('register') ? 'true' : 'false' }}">
+                    <a href="#authLabFull"
+                        class="nav-link dropdown-toggle {{ request()->is('auth-lab*') || request()->is('authorization-lab*') || request()->is('vulnerable*') || request()->routeIs('login') || request()->routeIs('register') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse"
+                        aria-expanded="{{ request()->is('auth-lab*') || request()->is('authorization-lab*') || request()->is('vulnerable*') || request()->routeIs('login') || request()->routeIs('register') ? 'true' : 'false' }}">
                         <i class="bi bi-person-lock me-2"></i> Lab Otorisasi
                     </a>
-                    <ul class="collapse nav-collapse {{ request()->is('auth-lab*') || request()->is('authorization-lab*') || request()->is('vulnerable*') || request()->routeIs('login') || request()->routeIs('register') ? 'show' : '' }}" id="authLabFull">
+                    <ul class="collapse nav-collapse {{ request()->is('auth-lab*') || request()->is('authorization-lab*') || request()->is('vulnerable*') || request()->routeIs('login') || request()->routeIs('register') ? 'show' : '' }}"
+                        id="authLabFull">
                         <li><a href="{{ route('auth-lab.index') }}" class="nav-link">Auth Overview</a></li>
                         <li><a href="{{ route('auth-lab.comparison') }}" class="nav-link">Secure vs Vuln</a></li>
-                        <li><a href="{{ route('authorization-lab.index') }}" class="nav-link">Otorisasi (RBAC)</a></li>
-                        <li><a href="{{ route('authorization-lab.login') }}" class="nav-link text-lab-info">Test Login (RBAC)</a></li>
-                        <li><a href="{{ route('authorization-lab.implementation') }}" class="nav-link text-lab-info">Implementation</a></li>
-
-                        {{-- Added from Demo Code --}}
+                        <li><a href="{{ route('authorization-lab.index') }}" class="nav-link">Otorisasi (RBAC)</a>
+                        </li>
+                        <li><a href="{{ route('authorization-lab.login') }}" class="nav-link text-lab-info">Test
+                                Login (RBAC)</a></li>
+                        <li><a href="{{ route('authorization-lab.implementation') }}"
+                                class="nav-link text-lab-info">Implementation</a></li>
                         <li><a href="{{ route('login') }}" class="nav-link text-lab-secure">Login (Secure)</a></li>
-                        <li><a href="{{ route('register') }}" class="nav-link text-lab-secure">Register (Secure)</a></li>
-                        <li><a href="{{ route('vulnerable.login') }}" class="nav-link text-lab-vuln">Login (Vuln)</a></li>
-                        <li><a href="{{ route('vulnerable.register') }}" class="nav-link text-lab-vuln">Register (Vuln)</a></li>
+                        <li><a href="{{ route('register') }}" class="nav-link text-lab-secure">Register (Secure)</a>
+                        </li>
+                        <li><a href="{{ route('vulnerable.login') }}" class="nav-link text-lab-vuln">Login (Vuln)</a>
+                        </li>
+                        <li><a href="{{ route('vulnerable.register') }}" class="nav-link text-lab-vuln">Register
+                                (Vuln)</a></li>
+                        <li><a href="{{ route('vulnerable.show-users') }}" class="nav-link text-lab-warn">Show DB
+                                Users</a></li>
+                        <li><a href="{{ route('vulnerable.brute-force-stats') }}" class="nav-link">Brute Force
+                                Stats</a></li>
+                    </ul>
+                </li>
 
-                        <li><a href="{{ route('vulnerable.show-users') }}" class="nav-link text-lab-warn">Show DB Users</a></li>
-                        <li><a href="{{ route('vulnerable.brute-force-stats') }}" class="nav-link">Brute Force Stats</a></li>
+                {{-- FILE UPLOAD LAB --}}
+                <li class="nav-item">
+                    <a href="#fileUploadLab"
+                        class="nav-link dropdown-toggle {{ request()->routeIs('file-upload-lab.*') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse"
+                        aria-expanded="{{ request()->routeIs('file-upload-lab.*') ? 'true' : 'false' }}">
+                        <i class="bi bi-cloud-upload me-2 text-lab-info"></i> File Upload Lab
+                    </a>
+                    <ul class="collapse nav-collapse {{ request()->routeIs('file-upload-lab.*') ? 'show' : '' }}"
+                        id="fileUploadLab">
+                        <li><a href="{{ route('file-upload-lab.index') }}" class="nav-link">Overview</a></li>
+                        <li><a href="{{ route('file-upload-lab.overview', 'logging') }}"
+                                class="nav-link text-lab-info">Logging Materi</a></li>
+                        <li><a href="{{ route('file-upload-lab.overview', 'upload-basics') }}"
+                                class="nav-link text-lab-info">Upload Basics</a></li>
+                        <li><a href="{{ route('file-upload-lab.vulnerable.index') }}"
+                                class="nav-link text-lab-vuln">Vulnerable Lab</a></li>
+                        <li><a href="{{ route('file-upload-lab.secure.index') }}"
+                                class="nav-link text-lab-secure">Secure Upload</a></li>
                     </ul>
                 </li>
 
                 {{-- TOOLS --}}
                 <li class="nav-section">Keamanan Tools</li>
                 <li class="nav-item">
-                    <a href="#toolsMenu" class="nav-link dropdown-toggle {{ request()->is('security-testing*') ? '' : 'collapsed' }}"
-                        data-bs-toggle="collapse" aria-expanded="{{ request()->is('security-testing*') ? 'true' : 'false' }}">
+                    <a href="#toolsMenu"
+                        class="nav-link dropdown-toggle {{ request()->is('security-testing*') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse"
+                        aria-expanded="{{ request()->is('security-testing*') ? 'true' : 'false' }}">
                         <i class="bi bi-tools me-2 text-lab-info"></i> Security Testing
                     </a>
-                    <ul class="collapse nav-collapse {{ request()->is('security-testing*') ? 'show' : '' }}" id="toolsMenu">
+                    <ul class="collapse nav-collapse {{ request()->is('security-testing*') ? 'show' : '' }}"
+                        id="toolsMenu">
                         <li><a href="{{ route('security-testing.index') }}" class="nav-link">Dashboard Test</a></li>
                         <li><a href="{{ route('security-testing.xss') }}" class="nav-link">XSS Scanner</a></li>
                         <li><a href="{{ route('security-testing.csrf') }}" class="nav-link">CSRF Tester</a></li>
                         <li><a href="{{ route('security-testing.headers') }}" class="nav-link">Headers Check</a></li>
-                        <li><a href="{{ route('security-testing.audit') }}" class="nav-link text-lab-secure">Audit Checklist</a></li>
+                        <li><a href="{{ route('security-testing.audit') }}" class="nav-link text-lab-secure">Audit
+                                Checklist</a></li>
                     </ul>
                 </li>
             </ul>
@@ -473,13 +584,15 @@
         {{-- TOPBAR --}}
         <header class="topbar">
             <div class="topbar-left d-flex align-items-center">
-                <button class="btn btn-light border-0 shadow-sm me-3" id="sidebarToggle"><i class="bi bi-list fs-5"></i></button>
+                <button class="btn btn-light border-0 shadow-sm me-3" id="sidebarToggle"><i
+                        class="bi bi-list fs-5"></i></button>
 
                 {{-- Breadcrumb Injection --}}
                 <div class="breadcrumb-wrapper d-none d-md-block">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="text-decoration-none"><i class="bi bi-house text-primary"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}"
+                                    class="text-decoration-none"><i class="bi bi-house text-primary"></i></a></li>
                             @hasSection('breadcrumb')
                                 @yield('breadcrumb')
                             @else
@@ -493,24 +606,30 @@
             <div class="topbar-right d-flex align-items-center gap-2">
                 {{-- SQLi Lab Quick Actions --}}
                 @if (request()->routeIs('sqli-lab.*'))
-                    <a href="{{ route('sqli-lab.seed') }}" class="btn btn-sm btn-outline-primary rounded-pill"><i class="bi bi-plus-circle"></i> Seed</a>
-                    <a href="{{ route('sqli-lab.reset') }}" class="btn btn-sm btn-outline-secondary rounded-pill"><i class="bi bi-arrow-counterclockwise"></i> Reset</a>
+                    <a href="{{ route('sqli-lab.seed') }}" class="btn btn-sm btn-outline-primary rounded-pill"><i
+                            class="bi bi-plus-circle"></i> Seed</a>
+                    <a href="{{ route('sqli-lab.reset') }}" class="btn btn-sm btn-outline-secondary rounded-pill"><i
+                            class="bi bi-arrow-counterclockwise"></i> Reset</a>
                 @endif
 
                 {{-- Dynamic Auth Dropdowns --}}
                 @auth
                     {{-- Secure Auth User --}}
                     <div class="dropdown">
-                        <button class="btn btn-white border shadow-sm dropdown-toggle rounded-pill px-3 py-1" data-bs-toggle="dropdown">
+                        <button class="btn btn-white border shadow-sm dropdown-toggle rounded-pill px-3 py-1"
+                            data-bs-toggle="dropdown">
                             <i class="bi bi-shield-check text-success me-1"></i> {{ Auth::user()->name }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                            <li class="px-3 py-2 small text-muted border-bottom">Role: <b class="text-primary">{{ ucfirst(Auth::user()->role) }}</b></li>
-                            <li><a class="dropdown-item py-2" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                            <li class="px-3 py-2 small text-muted border-bottom">Role: <b
+                                    class="text-primary">{{ ucfirst(Auth::user()->role ?? 'User') }}</b></li>
+                            <li><a class="dropdown-item py-2" href="{{ route('dashboard') }}"><i
+                                        class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button class="dropdown-item text-danger py-2"><i class="bi bi-box-arrow-right me-2"></i> Keluar</button>
+                                    <button class="dropdown-item text-danger py-2"><i
+                                            class="bi bi-box-arrow-right me-2"></i> Keluar</button>
                                 </form>
                             </li>
                         </ul>
@@ -520,15 +639,19 @@
                 @if (session('vulnerable_user'))
                     {{-- Vulnerable Auth User --}}
                     <div class="dropdown">
-                        <button class="btn btn-danger shadow-sm dropdown-toggle rounded-pill px-3 py-1" data-bs-toggle="dropdown">
-                            <i class="bi bi-exclamation-triangle me-1"></i> {{ session('vulnerable_user')->name ?? 'Vuln User' }}
+                        <button class="btn btn-danger shadow-sm dropdown-toggle rounded-pill px-3 py-1"
+                            data-bs-toggle="dropdown">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            {{ session('vulnerable_user')->name ?? 'Vuln User' }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                            <li><a class="dropdown-item py-2" href="{{ route('vulnerable.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i> Vuln Dashboard</a></li>
+                            <li><a class="dropdown-item py-2" href="{{ route('vulnerable.dashboard') }}"><i
+                                        class="bi bi-speedometer2 me-2"></i> Vuln Dashboard</a></li>
                             <li>
                                 <form method="POST" action="{{ route('vulnerable.logout') }}">
                                     @csrf
-                                    <button class="dropdown-item text-danger py-2"><i class="bi bi-box-arrow-right me-2"></i> Keluar (Vuln)</button>
+                                    <button class="dropdown-item text-danger py-2"><i
+                                            class="bi bi-box-arrow-right me-2"></i> Keluar (Vuln)</button>
                                 </form>
                             </li>
                         </ul>
@@ -539,17 +662,28 @@
                     @if (!session('vulnerable_user'))
                         {{-- Guest Menu --}}
                         <div class="dropdown">
-                            <button class="btn btn-white border shadow-sm dropdown-toggle rounded-pill px-3 py-1" data-bs-toggle="dropdown">
+                            <button class="btn btn-white border shadow-sm dropdown-toggle rounded-pill px-3 py-1"
+                                data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle text-secondary me-1"></i> Guest
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                                <li><h6 class="dropdown-header"><i class="bi bi-shield-check"></i> Secure Auth</h6></li>
-                                <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
-                                <li><a class="dropdown-item" href="{{ route('register') }}">Register</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><h6 class="dropdown-header"><i class="bi bi-exclamation-triangle"></i> Vulnerable Auth</h6></li>
-                                <li><a class="dropdown-item text-danger" href="{{ route('vulnerable.login') }}">Login (Vuln)</a></li>
-                                <li><a class="dropdown-item text-danger" href="{{ route('vulnerable.register') }}">Register (Vuln)</a></li>
+                                <li>
+                                    <h6 class="dropdown-header"><i class="bi bi-shield-check"></i> Secure Auth</h6>
+                                </li>
+                                <li><a class="dropdown-item text-success" href="{{ route('login') }}">Login</a></li>
+                                <li><a class="dropdown-item text-success" href="{{ route('register') }}">Register</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <h6 class="dropdown-header"><i class="bi bi-exclamation-triangle"></i> Vulnerable Auth
+                                    </h6>
+                                </li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('vulnerable.login') }}">Login
+                                        (Vuln)</a></li>
+                                <li><a class="dropdown-item text-danger"
+                                        href="{{ route('vulnerable.register') }}">Register (Vuln)</a></li>
                             </ul>
                         </div>
                     @endif
@@ -597,7 +731,8 @@
         </main>
 
         <footer class="py-3 px-4 bg-white border-top text-center">
-            <p class="mb-0 text-muted small">&copy; {{ date('Y') }} SMK Wikrama Bogor - Secure Coding Ticketing</p>
+            <p class="mb-0 text-muted small">&copy; {{ date('Y') }} SMK Wikrama Bogor - Secure Coding Ticketing
+            </p>
         </footer>
     </div>
 

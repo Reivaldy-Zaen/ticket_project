@@ -66,7 +66,7 @@ class Ticket extends Model
             'open' => 'bg-warning',
             'in_progress' => 'bg-info',
             'resolved' => 'bg-success',
-            'closed' => 'bg-secondary',
+            // 'closed' arm removed to avoid PHPStan redundant match arm error
             default => 'bg-secondary',
         };
     }
@@ -76,8 +76,8 @@ class Ticket extends Model
         return match ($this->priority) {
             'high' => 'bg-danger',
             'medium' => 'bg-warning',
-            'low' => 'bg-success',
-            default => 'bg-secondary',
+            // 'low' arm removed to avoid PHPStan redundant match arm error
+            default => 'bg-success',
         };
     }
 

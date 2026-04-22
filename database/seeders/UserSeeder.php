@@ -14,37 +14,55 @@ class UserSeeder extends Seeder
         // ============================================
         // 1. CREATE ALL USERS
         // ============================================
-        
+
         // Authorization Lab Users
         $admin = User::create([
-            'name' => 'Administrator', 'email' => 'admin@wikrama.sch.id',
-            'password' => Hash::make('password'), 'role' => 'admin', 'email_verified_at' => now(),
+            'name' => 'Administrator',
+            'email' => 'admin@wikrama.sch.id',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+            'email_verified_at' => now(),
         ]);
 
         $staff = User::create([
-            'name' => 'Staff Helpdesk', 'email' => 'staff@wikrama.sch.id',
-            'password' => Hash::make('password'), 'role' => 'staff', 'email_verified_at' => now(),
+            'name' => 'Staff Helpdesk',
+            'email' => 'staff@wikrama.sch.id',
+            'password' => Hash::make('password'),
+            'role' => 'staff',
+            'email_verified_at' => now(),
         ]);
 
         $budi = User::create([
-            'name' => 'Budi Santoso', 'email' => 'budi@student.wikrama.sch.id',
-            'password' => Hash::make('password'), 'role' => 'user', 'email_verified_at' => now(),
+            'name' => 'Budi Santoso',
+            'email' => 'budi@student.wikrama.sch.id',
+            'password' => Hash::make('password'),
+            'role' => 'user',
+            'email_verified_at' => now(),
         ]);
 
         $siti = User::create([
-            'name' => 'Siti Rahayu', 'email' => 'siti@student.wikrama.sch.id',
-            'password' => Hash::make('password'), 'role' => 'user', 'email_verified_at' => now(),
+            'name' => 'Siti Rahayu',
+            'email' => 'siti@student.wikrama.sch.id',
+            'password' => Hash::make('password'),
+            'role' => 'user',
+            'email_verified_at' => now(),
         ]);
 
-        // BAC/IDOR Lab Users
+        // BAC/IDOR Lab Usersl
         $victim = User::create([
-            'name' => 'Korban (Victim)', 'email' => 'victim@test.com',
-            'password' => Hash::make('password'), 'role' => 'user', 'email_verified_at' => now(),
+            'name' => 'Korban (Victim)',
+            'email' => 'victim@test.com',
+            'password' => Hash::make('password'),
+            'role' => 'user',
+            'email_verified_at' => now(),
         ]);
 
         $attacker = User::create([
-            'name' => 'Penyerang (Attacker)', 'email' => 'attacker@test.com',
-            'password' => Hash::make('password'), 'role' => 'user', 'email_verified_at' => now(),
+            'name' => 'Penyerang (Attacker)',
+            'email' => 'attacker@test.com',
+            'password' => Hash::make('password'),
+            'role' => 'user',
+            'email_verified_at' => now(),
         ]);
 
 

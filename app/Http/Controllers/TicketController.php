@@ -134,10 +134,5 @@ class TicketController extends Controller
         return back()->with('success', $message);
     }
 
-    // Fungsi dari kode aslimu tetap dipertahankan
-    public function vulnerableSearch(Request $request)
-    {
-        $query = $request->query('q');
-        return view('vulnerable.search', compact('query'));
-    }
+
 }

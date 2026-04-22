@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest; 
@@ -37,21 +37,5 @@ class LoginController extends Controller
         return redirect('/login');
     }
 
-    public function status(Request $request): View
-    {
-        $loginAttempts = [];
-        
-        if (class_exists(\App\Models\LoginAttempt::class)) {
-            $loginAttempts = \App\Models\LoginAttempt::secure()
-                ->where('email', Auth::user()?->email ?? $request->input('email', ''))
-                ->latest()
-                ->take(10)
-                ->get();
-        }
 
-        return view('auth.status', [
-            'attempts' => $loginAttempts,
-            'isSecure' => true,
-        ]);
-    }
 }

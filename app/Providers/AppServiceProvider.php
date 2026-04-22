@@ -22,7 +22,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
         Gate::policy(Ticket::class, TicketPolicy::class);
+
+        Gate::define('access-admin', function ($user) {
+            return $user->isAdmin();
+        });
+
+        Gate::define('manage-users', function ($user) {
+            return $user->isAdmin();
+        });
+
+        Gate::define('assign-tickets', function ($user) {
+            return $user->isAdmin() || $user->isStaff();
+        });
     }
 }
